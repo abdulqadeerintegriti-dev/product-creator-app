@@ -75,7 +75,11 @@ app.get("/api/low-stock", async (req, res) => {
   try {
     const session = res.locals.shopify.session;
 
-    const products = await getLowStockProducts(session);
+    // Threshold query se lo (default 5)
+    const threshold = parseInt(req.query.threshold || "5", 10);
+
+    // Sirf ek baar products fetch karo
+    const products = await getLowStockProducts(session, threshold);
 
     res.status(200).json({ products });
   } catch (error) {
