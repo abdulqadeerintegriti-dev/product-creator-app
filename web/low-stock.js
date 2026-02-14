@@ -6,25 +6,25 @@ export async function getLowStockProducts(session, threshold = 5) {
     session,
   });
 
-  const query = `
-    {
-      products(first: 20) {
-        edges {
-          node {
-            id
-            title
-            variants(first: 1) {
-              edges {
-                node {
-                  inventoryQuantity
-                }
-              }
+const query = `
+{
+  products(first: 50) {
+    edges {
+      node {
+        id
+        title
+        variants(first: 5) {
+          edges {
+            node {
+              inventoryQuantity
             }
           }
         }
       }
     }
-  `;
+  }
+}
+`;
 
   const response = await client.query({ data: query });
 

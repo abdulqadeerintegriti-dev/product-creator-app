@@ -88,6 +88,26 @@ app.get("/api/low-stock", async (req, res) => {
   }
 });
 
+app.get("/api/low-stock/settings", async (req, res) => {
+  try {
+    const session = res.locals.shopify.session;
+
+    const db = await getDB();
+
+    const row = await db.get(
+      `SELECT threshold FROM low_stock_settings WHERE shop = ?`,
+      [session.shop]
+    );
+
+    res.status(200).json({
+      threshold: row?.threshold || 5,
+    });
+  } catch (error) {
+    console.error("Load threshold error:", error);
+    res.status(500).json({ error: "Failed to load threshold" });
+  }
+});
+
 app.use(shopify.cspHeaders());
 app.use(serveStatic(STATIC_PATH, { index: false }));
 
