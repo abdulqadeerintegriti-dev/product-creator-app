@@ -69,7 +69,7 @@ const NOUNS = [
   "flower",
 ];
 
-export const DEFAULT_PRODUCTS_COUNT = 5;
+export const DEFAULT_PRODUCTS_COUNT = 1;
 const CREATE_PRODUCTS_MUTATION = `
   mutation populateProduct($input: ProductInput!) {
     productCreate(input: $input) {
