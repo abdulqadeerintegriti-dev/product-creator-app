@@ -3,6 +3,8 @@ import { join } from "path";
 import { readFileSync } from "fs";
 import express from "express";
 import serveStatic from "serve-static";
+import { getLowStockProducts } from "./low-stock.js";
+
 
 import shopify from "./shopify.js";
 import productCreator from "./product-creator.js";
@@ -67,6 +69,19 @@ app.post("/api/products", async (_req, res) => {
     error = e.message;
   }
   res.status(status).send({ success: status === 200, error });
+});
+
+app.get("/api/low-stock", async (req, res) => {
+  try {
+    const session = res.locals.shopify.session;
+
+    const products = await getLowStockProducts(session);
+
+    res.status(200).json({ products });
+  } catch (error) {
+    console.error("Low stock API error:", error);
+    res.status(500).json({ error: "Failed to fetch inventory" });
+  }
 });
 
 app.use(shopify.cspHeaders());
